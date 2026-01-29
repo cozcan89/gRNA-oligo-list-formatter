@@ -238,8 +238,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## Contact
 
-For questions or issues, please open an issue on GitHub or contact [your-email@example.com]
-
+For questions or issues, please open an issue on GitHub.
 ## Acknowledgments
 
 This tool was developed to streamline the process of formatting pre-designed gRNA sequences into cloning-ready oligonucleotides for CRISPR experiments.
