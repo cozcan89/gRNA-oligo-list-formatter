@@ -1,0 +1,216 @@
+---
+title: "gRNA Cloning Oligo Formatter"
+author: "Can Ozcan"
+date: "2023-07-09"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: cosmo
+    code_folding: show
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+## Overview
+
+This tool formats pre-designed CRISPR guide RNA (gRNA) sequences into ready-to-order sense and antisense oligonucleotides with appropriate overhangs for **BsmBI**-based cloning into **lentiGuide-puro** vector.
+
+**Important:** This tool does NOT design gRNAs. It takes your already-designed 20bp gRNA target sequences (from tools like CHOPCHOP, Benchling, or CRISPick) and adds the correct overhangs for cloning.
+
+## Load Required Libraries
+
+```{r libraries}
+library(readxl)
+library(tidyverse)
+library(openxlsx)
+```
+
+## Define Helper Functions and Parameters
+
+### String Reverse Function
+
+```{r functions}
+# Function to reverse a string
+strreverse <- function(x) {
+  strsplit(x, NULL) %>% 
+    lapply(rev) %>% 
+    sapply(paste, collapse = "")
+}
+```
+
+### Overhang Sequences
+
+These overhangs are designed for BsmBI-based cloning into lentiGuide-puro:
+
+```{r parameters}
+# Define overhangs for cloning
+forw_overhang <- "cacc"      # For sequences starting with G
+forw_overhang_g <- "caccg"   # For sequences NOT starting with G
+rev_overhang <- "aaac"       # Universal reverse overhang
+rev_overhang_2 <- "c"        # Additional 3' overhang for non-G sequences
+```
+
+## Input File Requirements
+
+Your input Excel file (`oligo_list.xlsx`) should have the following structure:
+
+- **Column 1: name** - Guide RNA identifier (e.g., GENE1_1, GENE2_1)
+- **Column 2: target_seq** - 20bp target sequence (without PAM)
+
+## Read and Process Input Data
+
+```{r read_data}
+# Set working directory
+setwd(getwd())
+
+# Read input file
+cat("Reading input file: oligo_list.xlsx\n")
+input_file <- read_excel("oligo_list.xlsx", sheet = "Sayfa1")
+
+# Display input data
+cat("\nInput data preview:\n")
+head(input_file) %>% knitr::kable()
+
+cat("\nTotal sequences to process:", nrow(input_file), "\n")
+```
+
+## Generate Reverse Complement
+
+```{r reverse_complement}
+# Generate reverse complement of target sequences
+input_file <- input_file %>% 
+  mutate(reversed = strreverse(target_seq))
+
+input_file$reversed <- chartr("ACGT", "TGCA", input_file$reversed)
+
+# Preview reverse complements
+cat("\nTarget sequences with reverse complements:\n")
+head(input_file) %>% knitr::kable()
+```
+
+## Add Overhangs
+
+The tool adds appropriate overhangs based on whether the sequence starts with 'G':
+
+- **Sequences starting with 'G'**: Use standard overhang
+- **Sequences NOT starting with 'G'**: Add extra 'G' to forward and 'C' to reverse
+
+```{r add_overhangs}
+# Add appropriate overhangs
+input_file <- input_file %>% 
+  mutate(
+    forward_oligo = as.character(target_seq),
+    forward_oligo = ifelse(
+      startsWith(target_seq, "G"),
+      paste0(forw_overhang, target_seq),
+      paste0(forw_overhang_g, target_seq)
+    )
+  ) %>% 
+  mutate(
+    reverse_oligo = as.character(reversed),
+    reverse_oligo = ifelse(
+      startsWith(target_seq, "G"),
+      paste0(rev_overhang, reversed),
+      paste0(rev_overhang, reversed, rev_overhang_2)
+    )
+  )
+
+# Show sequences with overhangs
+cat("\nSequences with overhangs added:\n")
+head(input_file %>% select(name, target_seq, forward_oligo, reverse_oligo)) %>% 
+  knitr::kable()
+```
+
+## Format Output for Ordering
+
+```{r format_output}
+# Reformat for oligo ordering
+output_file <- input_file[, c(1, 4, 5)]
+output_file <- output_file %>% 
+  pivot_longer(
+    !name, 
+    names_to = "strand", 
+    values_to = "sequence"
+  ) %>% 
+  mutate(oligo_name = paste0(name, "-", strand))
+
+# Clean up oligo names
+output_file$oligo_name <- gsub("_o.*", "", output_file$oligo_name)
+output_file <- output_file[, c(4, 3)]
+
+# Display final output format
+cat("\nFinal oligo format for ordering:\n")
+head(output_file, 10) %>% knitr::kable()
+```
+
+## Save Output File
+
+```{r save_output}
+# Write output to Excel file
+write.xlsx(
+  output_file, 
+  file = "ready_to_order.xlsx", 
+  sheetName = "Sheet1", 
+  colNames = TRUE, 
+  append = FALSE, 
+  colWidths = "auto"
+)
+
+cat("\nOutput file saved: ready_to_order.xlsx\n")
+cat("Total oligos generated:", nrow(output_file), "\n")
+```
+
+## Summary Statistics
+
+```{r summary}
+# Calculate summary statistics
+summary_stats <- data.frame(
+  Metric = c(
+    "Total guide sequences",
+    "Total oligos (forward + reverse)",
+    "Sequences starting with G",
+    "Sequences NOT starting with G"
+  ),
+  Count = c(
+    nrow(input_file),
+    nrow(output_file),
+    sum(startsWith(input_file$target_seq, "G")),
+    sum(!startsWith(input_file$target_seq, "G"))
+  )
+)
+
+knitr::kable(summary_stats)
+```
+
+## Example Output
+
+Here's an example of how a guide sequence is processed:
+
+```{r example, echo=FALSE}
+example_data <- data.frame(
+  Step = c("Input", "Forward oligo", "Reverse oligo"),
+  Sequence = c(
+    "GATGTGTGTCAAACTCTCGG",
+    "caccGATGTGTGTCAAACTCTCGG",
+    "aaacCCGAGAGTTTGACACACATc"
+  )
+)
+
+knitr::kable(example_data)
+```
+
+## Next Steps
+
+1. **Order oligos**: Send the `ready_to_order.xlsx` file to your oligo synthesis provider
+2. **Anneal oligos**: Mix forward and reverse oligos at equimolar ratio
+3. **Clone**: Ligate annealed oligos into BsmBI-digested lentiGuide-puro vector
+4. **Transform**: Transform into competent E. coli cells
+
+## Session Information
+
+```{r session_info}
+sessionInfo()
+```
