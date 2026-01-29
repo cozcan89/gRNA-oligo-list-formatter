@@ -182,7 +182,7 @@ target_seq: GATGTGTGTCAAACTCTCGG
 **Output:**
 ```
 PFKP_1-forward_oligo:  caccGATGTGTGTCAAACTCTCGG
-PFKP_1-reverse_oligo:  aaacCCGAGAGTTTGACACACATc
+PFKP_1-reverse_oligo:  aaacCCGAGAGTTTGACACACATC
 ```
 
 ## Cloning Protocol Notes
