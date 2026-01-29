@@ -224,8 +224,8 @@ PFKP_1-reverse_oligo:  aaacCCGAGAGTTTGACACACATc
 If you use this tool in your research, please cite:
 
 ```
-Ozcan, C. (2023). gRNA Cloning Oligo Formatter. 
-GitHub: https://github.com/yourusername/grna-cloning-oligo-formatter
+Ozcan, S. C. (2023). gRNA Cloning Oligo Formatter. 
+GitHub: https://github.com/cozcan89/gRNA-oligo-list-formatter
 ```
 
 ## License
