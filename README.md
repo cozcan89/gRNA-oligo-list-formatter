@@ -142,8 +142,8 @@ The tool generates `ready_to_order.xlsx` with the following format:
 
 | oligo_name        | sequence                    |
 |-------------------|----------------------------|
-| GENE1_1-forward   | caccGATGTGTGTCAAACTCTCGG    |
-| GENE1_1-reverse   | aaacCCGAGAGTTTGACACACATc    |
+| GENE1_1-forward   | caccgTATGTGTGTCAAACTCTCGG    |
+| GENE1_1-reverse   | aaacCCGAGAGTTTGACACACATAc    |
 
 You can directly order these sequences from your oligo synthesis provider.
 
