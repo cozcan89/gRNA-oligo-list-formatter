@@ -40,7 +40,7 @@ This tool automates the process of formatting pre-designed gRNA target sequences
 - Outputs ready-to-order sense and antisense oligonucleotide pairs
 
 **What this tool does NOT do:**
-- Design gRNA sequences (use tools like CHOPCHOP, Benchling, or CRISPick for gRNA design)
+- Design gRNA sequences
 - Predict on-target or off-target effects
 - Analyze PAM sequences
 
@@ -99,7 +99,8 @@ cd grna-cloning-oligo-formatter
 - [Benchling CRISPR tool](https://www.benchling.com/)
 - [CRISPick (Broad Institute)](https://portals.broadinstitute.org/gppx/crispick/public)
 - [GPP sgRNA Designer](https://portals.broadinstitute.org/gpp/public/analysis-tools/sgrna-design)
-
+- Copy the sequences from genome-wide CRISPR libraries
+  
 **Then**, create an Excel file named `oligo_list.xlsx` with the following structure:
 
 | name   | target_seq           |
