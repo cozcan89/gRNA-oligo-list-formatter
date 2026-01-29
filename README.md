@@ -104,7 +104,7 @@ cd grna-cloning-oligo-formatter
 
 | name   | target_seq           |
 |--------|---------------------|
-| GENE1_1| GATGTGTGTCAAACTCTCGG |
+| GENE1_1| TATGTGTGTCAAACTCTCGG |
 | GENE1_2| GCCGGATGATCAGATCCCAA |
 | GENE2_1| ATCGGCTGGACAGATGTCGG |
 
