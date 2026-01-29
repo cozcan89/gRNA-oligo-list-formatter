@@ -94,12 +94,11 @@ cd grna-cloning-oligo-formatter
 
 ### 1. Prepare Your Input File
 
-**First**, design your gRNA sequences using your preferred gRNA design tool:
+**First**, get your gRNA sequences using your preferred gRNA design tool or from genome-wide libraries:
 - [CHOPCHOP](http://chopchop.cbu.uib.no/)
 - [Benchling CRISPR tool](https://www.benchling.com/)
 - [CRISPick (Broad Institute)](https://portals.broadinstitute.org/gppx/crispick/public)
 - [GPP sgRNA Designer](https://portals.broadinstitute.org/gpp/public/analysis-tools/sgrna-design)
-- Copy the sequences from genome-wide CRISPR libraries
   
 **Then**, create an Excel file named `oligo_list.xlsx` with the following structure:
 
