@@ -99,6 +99,7 @@ cd grna-cloning-oligo-formatter
 - [Benchling CRISPR tool](https://www.benchling.com/)
 - [CRISPick (Broad Institute)](https://portals.broadinstitute.org/gppx/crispick/public)
 - [GPP sgRNA Designer](https://portals.broadinstitute.org/gpp/public/analysis-tools/sgrna-design)
+- [crisprVerse](https://github.com/crisprVerse)
   
 **Then**, create an Excel file named `oligo_list.xlsx` with the following structure:
 
