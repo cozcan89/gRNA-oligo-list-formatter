@@ -244,7 +244,7 @@ For questions or issues, please open an issue on GitHub.
 
 This tool was developed to streamline the process of formatting pre-designed gRNA sequences into cloning-ready oligonucleotides for CRISPR experiments.
 
-**For gRNA design**, we recommend:
-- CHOPCHOP - http://chopchop.cbu.uib.no/
+**For gRNA design**, I recommend:
+- crisprVerse - https://github.com/crisprVerse/
 - Benchling CRISPR - https://www.benchling.com/
-- Broad Institute GPP tools - https://portals.broadinstitute.org/gpp/public/
+
